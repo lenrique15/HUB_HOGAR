@@ -1,12 +1,16 @@
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 import subprocess
+from modules.afi_connector import obtener_resumen_financiero
+
 
 
 class HubHogar:
 
     def __init__(self, root):
         self.root = root
+
+        resumen = obtener_resumen_financiero()
 
         root.title("HUB Hogar 0.1 ALPHA")
 
@@ -76,7 +80,22 @@ class HubHogar:
 
         ttk.Label(
             card1,
-            text="AFI conectado próximamente"
+            text=f"Movimientos: {resumen['movimientos']}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card1,
+            text=f"Ingresos: ${resumen['ingresos']:,.2f}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card1,
+            text=f"Gastos: ${resumen['gastos']:,.2f}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card1,
+            text=f"Balance: ${resumen['balance']:,.2f}"
         ).pack(anchor="w")
 
         # Tarjeta Respaldos
