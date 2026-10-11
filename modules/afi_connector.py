@@ -51,3 +51,26 @@ def obtener_resumen_financiero():
         "ultimo_concepto": ultimo[0] if ultimo else "",
         "ultimo_monto": ultimo[1] if ultimo else 0
     }
+
+def obtener_movimientos_mes_actual():
+
+    conn = sqlite3.connect(DB_PATH)
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            fecha,
+            concepto,
+            categoria,
+            tipo,
+            monto
+        FROM movimientos
+        ORDER BY fecha
+    """)
+
+    movimientos = cursor.fetchall()
+
+    conn.close()
+
+    return movimientos

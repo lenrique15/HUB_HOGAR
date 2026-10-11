@@ -185,6 +185,55 @@ def obtener_resumen_mes_actual():
         "total": round(total, 2)
     }
 
+def obtener_obligaciones_mes_actual():
+
+    conn = sqlite3.connect(DB_PATH)
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            nombre,
+            monto,
+            proxima_fecha
+        FROM obligaciones
+        WHERE activo = 1
+        ORDER BY proxima_fecha
+    """)
+
+    registros = cursor.fetchall()
+
+    conn.close()
+
+    hoy = datetime.now()
+
+    obligaciones_mes = []
+
+    for nombre, monto, fecha in registros:
+
+        try:
+
+            fecha_pago = datetime.strptime(
+                fecha,
+                "%Y-%m-%d"
+            )
+
+            if (
+                fecha_pago.month == hoy.month
+                and fecha_pago.year == hoy.year
+            ):
+
+                obligaciones_mes.append({
+                    "nombre": nombre,
+                    "monto": monto,
+                    "fecha": fecha
+                })
+
+        except:
+            pass
+
+    return obligaciones_mes
+
 def marcar_pagado(obligacion_id):
 
     conn = sqlite3.connect(DB_PATH)

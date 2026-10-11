@@ -44,7 +44,14 @@ def obtener_resumen_respaldos():
         f"{fecha[0:4]}"
     )
 
+    carpetas = [
+        item.name
+        for item in ultimo.iterdir()
+        if item.is_dir()
+    ]
+
     return {
         "total_respaldos": total_respaldos,
-        "ultimo_respaldo": fecha_legible
+        "ultimo_respaldo": fecha_legible,
+        "carpetas": carpetas
     }
