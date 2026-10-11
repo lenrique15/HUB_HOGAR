@@ -21,8 +21,8 @@ class HubHogar:
 
         root.title("HUB Hogar 0.1 ALPHA")
 
-        width = 1400
-        height = 900
+        width = 1300
+        height = 800
 
         root.update_idletasks()
 
@@ -46,7 +46,7 @@ class HubHogar:
 
         ttk.Button(
             sidebar,
-            text="🏠 Dashboard",
+            text="🖥️ Dashboard",
             command=self.mostrar_dashboard
         ).pack(fill=X, pady=5)
 
@@ -64,7 +64,7 @@ class HubHogar:
 
         ttk.Button(
             sidebar,
-            text="Hogar",
+            text="🏠 Hogar",
             command=self.mostrar_hogar
         ).pack(fill=X, pady=5)
 
@@ -221,6 +221,13 @@ class HubHogar:
             - hogar["total_mes"]
         )
 
+        if disponible >= 0:
+            estado = "🟢 FINANZAS SANAS"
+            color_estado = "green"
+        else:
+            estado = "🔴 FINANZAS EN RIESGO"
+            color_estado = "red"
+
 
         card0 = ttk.Labelframe(
             self.main,
@@ -246,6 +253,13 @@ class HubHogar:
                 f"Compromisos del mes: ${hogar['total_mes']:,.2f}"
             )
         ).pack(anchor="w")
+
+        ttk.Label(
+            card0,
+            text=estado,
+            font=("Helvetica", 11, "bold"),
+            foreground=color_estado
+        ).pack(anchor="w", pady=(5, 0))
 
         card3 = ttk.Labelframe(
             self.main,
@@ -359,13 +373,6 @@ class HubHogar:
             text="💰 Finanzas",
             font=("Helvetica", 20, "bold")
         ).pack(anchor="w")
-
-        ttk.Button(
-            self.main,
-            text="📄 Generar Reporte Mensual",
-            bootstyle="info",
-            command=self.generar_reporte_mensual
-        ).pack(pady=10)
 
         ttk.Label(
             self.main,
@@ -481,14 +488,6 @@ class HubHogar:
                 font=("Courier", 10)
             ).pack(anchor="w")
 
-
-        ttk.Button(
-            self.main,
-            text="Abrir AFI",
-            bootstyle="success",
-            command=self.abrir_afi
-        ).pack(pady=20)
-
         ttk.Separator(card_pagos).pack(
             fill=X,
             pady=5
@@ -499,6 +498,20 @@ class HubHogar:
             text=f"TOTAL DEL MES: ${total_mes:,.2f}",
             font=("Helvetica", 11, "bold")
         ).pack(anchor="e", pady=(5,0))
+
+        ttk.Button(
+            self.main,
+            text="📄 Generar Reporte Mensual",
+            bootstyle="info",
+            command=self.generar_reporte_mensual
+        ).pack(pady=(20,5))
+
+        ttk.Button(
+            self.main,
+            text="Abrir AFI",
+            bootstyle="success",
+            command=self.abrir_afi
+        ).pack(pady=(5,20))
 
     def generar_reporte_mensual(self):
 
