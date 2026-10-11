@@ -6,7 +6,8 @@ from hogar.service import (
     actualizar_obligacion,
     desactivar_obligacion as desactivar_bd,
     obtener_resumen_obligaciones,
-    obtener_resumen_mes_actual
+    obtener_resumen_mes_actual,
+    marcar_pagado as marcar_pagado_bd
 )
 
 
@@ -91,6 +92,16 @@ class HogarView:
             text="🗑️ Desactivar",
             bootstyle="danger",
             command=self.desactivar_obligacion
+        ).pack(
+            side="left",
+            padx=(10, 0)
+        )
+
+        ttk.Button(
+            barra_botones,
+            text="✅ Marcar Pagado",
+            bootstyle="success",
+            command=self.marcar_pagado
         ).pack(
             side="left",
             padx=(10, 0)
@@ -430,6 +441,29 @@ class HogarView:
         obligacion_id = valores[0]
 
         desactivar_bd(
+            obligacion_id
+        )
+
+        for item in self.lista.get_children():
+            self.lista.delete(item)
+
+        self.cargar_datos()
+
+    def marcar_pagado(self):
+
+        seleccion = self.lista.selection()
+
+        if not seleccion:
+            print("Seleccione un registro")
+            return
+
+        valores = self.lista.item(
+            seleccion[0]
+        )["values"]
+
+        obligacion_id = valores[0]
+
+        marcar_pagado_bd(
             obligacion_id
         )
 

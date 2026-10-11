@@ -81,6 +81,7 @@ class HubHogar:
         ).pack(anchor="w", pady=(0, 20))
 
         # Tarjeta Finanzas
+
         card1 = ttk.Labelframe(self.main, text="Finanzas", padding=15)
         card1.pack(fill=X, pady=10)
 
@@ -203,7 +204,37 @@ class HubHogar:
         resumen = obtener_resumen_financiero()
         respaldos = obtener_resumen_respaldos()
         hogar = obtener_dashboard_hogar()
+        
+        disponible = (
+            resumen["balance"]
+            - hogar["total_mes"]
+        )
 
+
+        card0 = ttk.Labelframe(
+            self.main,
+            text="Disponible después de compromisos",
+            padding=15
+        )
+
+        card0.pack(
+            fill=X,
+            pady=10
+        )
+
+        ttk.Label(
+            card0,
+            text=f"${disponible:,.2f}",
+            font=("Helvetica", 18, "bold")
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card0,
+            text=(
+                f"Balance: ${resumen['balance']:,.2f}  |  "
+                f"Compromisos del mes: ${hogar['total_mes']:,.2f}"
+            )
+        ).pack(anchor="w")
 
         card3 = ttk.Labelframe(
             self.main,

@@ -1,5 +1,7 @@
 import sqlite3
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
 
 DB_PATH = "data/hogar.db"
 
@@ -182,3 +184,65 @@ def obtener_resumen_mes_actual():
         "cantidad": cantidad,
         "total": round(total, 2)
     }
+
+def marcar_pagado(obligacion_id):
+
+    conn = sqlite3.connect(DB_PATH)
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT frecuencia, proxima_fecha
+        FROM obligaciones
+        WHERE id = ?
+    """, (obligacion_id,))
+
+    resultado = cursor.fetchone()
+
+    if not resultado:
+        conn.close()
+        return
+
+    frecuencia, fecha = resultado
+
+    fecha_actual = datetime.strptime(
+        fecha,
+        "%Y-%m-%d"
+    )
+
+    if frecuencia == "Semanal":
+        nueva_fecha = fecha_actual + relativedelta(weeks=1)
+
+    elif frecuencia == "Quincenal":
+        nueva_fecha = fecha_actual + relativedelta(days=15)
+
+    elif frecuencia == "Mensual":
+        nueva_fecha = fecha_actual + relativedelta(months=1)
+
+    elif frecuencia == "Bimestral":
+        nueva_fecha = fecha_actual + relativedelta(months=2)
+
+    elif frecuencia == "Trimestral":
+        nueva_fecha = fecha_actual + relativedelta(months=3)
+
+    elif frecuencia == "Semestral":
+        nueva_fecha = fecha_actual + relativedelta(months=6)
+
+    elif frecuencia == "Anual":
+        nueva_fecha = fecha_actual + relativedelta(years=1)
+
+    else:
+        conn.close()
+        return
+
+    cursor.execute("""
+        UPDATE obligaciones
+        SET proxima_fecha = ?
+        WHERE id = ?
+    """, (
+        nueva_fecha.strftime("%Y-%m-%d"),
+        obligacion_id
+    ))
+
+    conn.commit()
+    conn.close()
