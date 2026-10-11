@@ -4,7 +4,9 @@ from hogar.service import (
     obtener_obligaciones,
     agregar_obligacion,
     actualizar_obligacion,
-    desactivar_obligacion as desactivar_bd
+    desactivar_obligacion as desactivar_bd,
+    obtener_resumen_obligaciones,
+    obtener_resumen_mes_actual
 )
 
 
@@ -22,6 +24,38 @@ class HogarView:
         ).pack(
             anchor="w",
             pady=(0, 20)
+        )
+
+
+        resumen = obtener_resumen_obligaciones()
+
+        resumen_mes = obtener_resumen_mes_actual()
+
+        ttk.Label(
+            self.frame,
+            text=f"Obligaciones activas: {resumen['total_registros']}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            self.frame,
+            text=f"Total registrado: ${resumen['total_monto']:,.2f}"
+        ).pack(
+            anchor="w",
+            pady=(0, 15)
+        )
+
+
+        ttk.Label(
+            self.frame,
+            text=f"Compromisos este mes: {resumen_mes['cantidad']}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            self.frame,
+            text=f"Total este mes: ${resumen_mes['total']:,.2f}"
+        ).pack(
+            anchor="w",
+            pady=(0, 15)
         )
 
         barra_botones = ttk.Frame(

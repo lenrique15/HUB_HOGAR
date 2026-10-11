@@ -43,8 +43,8 @@ class HubHogar:
 
         ttk.Button(
             sidebar,
-            text="Dashboard",
-            bootstyle="primary"
+            text="🏠 Dashboard",
+            command=self.mostrar_dashboard
         ).pack(fill=X, pady=5)
 
         ttk.Button(
@@ -145,6 +145,8 @@ class HubHogar:
             command=self.abrir_adp
         ).pack(side=LEFT, padx=10)
 
+        self.mostrar_dashboard()
+
     def abrir_afi(self):
 
         subprocess.Popen(
@@ -180,6 +182,96 @@ class HubHogar:
             fill="both",
             expand=True
         )
+
+    def mostrar_dashboard(self):
+
+        self.limpiar_contenido()
+
+        ttk.Label(
+            self.main,
+            text="Bienvenido a HUB Hogar",
+            font=("Helvetica", 20, "bold")
+        ).pack(anchor="w")
+
+        ttk.Label(
+            self.main,
+            text="Centro de control familiar",
+            font=("Helvetica", 11)
+        ).pack(anchor="w", pady=(0, 20))
+
+        resumen = obtener_resumen_financiero()
+        respaldos = obtener_resumen_respaldos()
+
+        card1 = ttk.Labelframe(
+            self.main,
+            text="Finanzas",
+            padding=15
+        )
+        card1.pack(fill=X, pady=10)
+
+        ttk.Label(
+            card1,
+            text=f"Balance actual: ${resumen['balance']:,.2f}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card1,
+            text=f"Ingresos: ${resumen['ingresos']:,.2f}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card1,
+            text=f"Gastos: ${resumen['gastos']:,.2f}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card1,
+            text=f"Movimientos: {resumen['movimientos']}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card1,
+            text=f"Último movimiento: {resumen['ultimo_concepto']}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card1,
+            text=f"Monto: ${resumen['ultimo_monto']:,.2f}"
+        ).pack(anchor="w")
+
+        card2 = ttk.Labelframe(
+            self.main,
+            text="Respaldos",
+            padding=15
+        )
+        card2.pack(fill=X, pady=10)
+
+        ttk.Label(
+            card2,
+            text=f"Respaldos realizados: {respaldos['total_respaldos']}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card2,
+            text=f"Último respaldo: {respaldos['ultimo_respaldo']}"
+        ).pack(anchor="w")
+
+        botones = ttk.Frame(self.main)
+        botones.pack(pady=20)
+
+        ttk.Button(
+            botones,
+            text="Abrir AFI",
+            bootstyle="success",
+            command=self.abrir_afi
+        ).pack(side=LEFT, padx=10)
+
+        ttk.Button(
+            botones,
+            text="Abrir ADP",
+            bootstyle="info",
+            command=self.abrir_adp
+        ).pack(side=LEFT, padx=10)
 
 app = ttk.Window(themename="flatly")
 HubHogar(app)

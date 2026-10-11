@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 DB_PATH = "data/hogar.db"
 
@@ -112,3 +113,72 @@ def desactivar_obligacion(obligacion_id):
 
     conn.commit()
     conn.close()
+
+def obtener_resumen_obligaciones():
+
+    conn = sqlite3.connect(DB_PATH)
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT COUNT(*),
+               COALESCE(SUM(monto), 0)
+        FROM obligaciones
+        WHERE activo = 1
+    """)
+
+    total_registros, total_monto = cursor.fetchone()
+
+    conn.close()
+
+    return {
+        "total_registros": total_registros,
+        "total_monto": total_monto
+    }
+
+def obtener_resumen_mes_actual():
+
+    conn = sqlite3.connect(DB_PATH)
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT monto, proxima_fecha
+        FROM obligaciones
+        WHERE activo = 1
+    """)
+
+    registros = cursor.fetchall()
+
+    conn.close()
+
+    hoy = datetime.now()
+
+    total = 0
+    cantidad = 0
+
+    for monto, fecha in registros:
+
+        try:
+
+            fecha_pago = datetime.strptime(
+                fecha,
+                "%Y-%m-%d"
+            )
+
+            if (
+                fecha_pago.month == hoy.month
+                and fecha_pago.year == hoy.year
+            ):
+
+                total += monto
+                cantidad += 1
+
+        except:
+
+            pass
+
+    return {
+        "cantidad": cantidad,
+        "total": round(total, 2)
+    }
