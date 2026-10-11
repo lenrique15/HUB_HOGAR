@@ -4,6 +4,7 @@ import subprocess
 
 from modules.afi_connector import obtener_resumen_financiero
 from modules.adp_connector import obtener_resumen_respaldos
+from hogar.view import HogarView
 
 
 
@@ -17,8 +18,8 @@ class HubHogar:
 
         root.title("HUB Hogar 0.1 ALPHA")
 
-        width = 1000
-        height = 600
+        width = 1200
+        height = 800
 
         root.update_idletasks()
 
@@ -58,27 +59,28 @@ class HubHogar:
 
         ttk.Button(
             sidebar,
-            text="Hogar"
+            text="Hogar",
+            command=self.mostrar_hogar
         ).pack(fill=X, pady=5)
 
         # Área principal
-        main = ttk.Frame(root, padding=20)
-        main.pack(side=RIGHT, fill=BOTH, expand=True)
+        self.main = ttk.Frame(root, padding=20)
+        self.main.pack(side=RIGHT, fill=BOTH, expand=True)
 
         ttk.Label(
-            main,
+            self.main,
             text="Bienvenido a HUB Hogar",
             font=("Helvetica", 20, "bold")
         ).pack(anchor="w")
 
         ttk.Label(
-            main,
+            self.main,
             text="Centro de control familiar",
             font=("Helvetica", 11)
         ).pack(anchor="w", pady=(0, 20))
 
         # Tarjeta Finanzas
-        card1 = ttk.Labelframe(main, text="Finanzas", padding=15)
+        card1 = ttk.Labelframe(self.main, text="Finanzas", padding=15)
         card1.pack(fill=X, pady=10)
 
         ttk.Label(
@@ -112,7 +114,7 @@ class HubHogar:
         ).pack(anchor="w")
 
         # Tarjeta Respaldos
-        card2 = ttk.Labelframe(main, text="Respaldos", padding=15)
+        card2 = ttk.Labelframe(self.main, text="Respaldos", padding=15)
         card2.pack(fill=X, pady=10)
 
         ttk.Label(
@@ -126,7 +128,7 @@ class HubHogar:
         ).pack(anchor="w")
 
         # Botones
-        botones = ttk.Frame(main)
+        botones = ttk.Frame(self.main)
         botones.pack(pady=20)
 
         ttk.Button(
@@ -163,6 +165,23 @@ class HubHogar:
             cwd="/Users/luisbonilla/Documents/Python/Activos/ADP"
         )
 
+    def limpiar_contenido(self):
+
+        for widget in self.main.winfo_children():
+            widget.destroy()
+
+    def mostrar_hogar(self):
+
+        self.limpiar_contenido()
+
+        vista = HogarView(self.main)
+
+        vista.frame.pack(
+            fill="both",
+            expand=True
+        )
+
 app = ttk.Window(themename="flatly")
 HubHogar(app)
 app.mainloop()
+

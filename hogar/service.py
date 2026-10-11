@@ -60,3 +60,55 @@ def obtener_obligaciones():
     conn.close()
 
     return datos
+
+def actualizar_obligacion(
+    obligacion_id,
+    nombre,
+    categoria,
+    monto,
+    frecuencia,
+    proxima_fecha
+):
+
+    conn = sqlite3.connect(DB_PATH)
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE obligaciones
+        SET
+            nombre = ?,
+            categoria = ?,
+            monto = ?,
+            frecuencia = ?,
+            proxima_fecha = ?
+        WHERE id = ?
+    """, (
+        nombre,
+        categoria,
+        monto,
+        frecuencia,
+        proxima_fecha,
+        obligacion_id
+    ))
+
+    conn.commit()
+    conn.close()
+
+def desactivar_obligacion(obligacion_id):
+
+    conn = sqlite3.connect(DB_PATH)
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE obligaciones
+        SET activo = 0
+        WHERE id = ?
+        """,
+        (obligacion_id,)
+    )
+
+    conn.commit()
+    conn.close()
