@@ -4,6 +4,7 @@ import subprocess
 
 from modules.afi_connector import obtener_resumen_financiero
 from modules.adp_connector import obtener_resumen_respaldos
+from modules.hogar_connector import obtener_dashboard_hogar
 from hogar.view import HogarView
 
 
@@ -201,6 +202,40 @@ class HubHogar:
 
         resumen = obtener_resumen_financiero()
         respaldos = obtener_resumen_respaldos()
+        hogar = obtener_dashboard_hogar()
+
+
+        card3 = ttk.Labelframe(
+            self.main,
+            text="Obligaciones",
+            padding=15
+        )
+
+        card3.pack(
+            fill=X,
+            pady=10
+        )
+
+        ttk.Label(
+            card3,
+            text=f"Obligaciones activas: {hogar['activas']}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card3,
+            text=f"Compromisos este mes: {hogar['compromisos_mes']}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card3,
+            text=f"Total este mes: ${hogar['total_mes']:,.2f}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card3,
+            text=f"Total registrado: ${hogar['total']:,.2f}"
+        ).pack(anchor="w")
+
 
         card1 = ttk.Labelframe(
             self.main,
@@ -255,6 +290,10 @@ class HubHogar:
             card2,
             text=f"Último respaldo: {respaldos['ultimo_respaldo']}"
         ).pack(anchor="w")
+
+
+
+
 
         botones = ttk.Frame(self.main)
         botones.pack(pady=20)
