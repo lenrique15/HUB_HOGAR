@@ -80,7 +80,7 @@ class HubHogar:
 
         ttk.Label(
             card1,
-            text=f"Movimientos: {resumen['movimientos']}"
+            text=f"Balance actual: ${resumen['balance']:,.2f}"
         ).pack(anchor="w")
 
         ttk.Label(
@@ -95,7 +95,17 @@ class HubHogar:
 
         ttk.Label(
             card1,
-            text=f"Balance: ${resumen['balance']:,.2f}"
+            text=f"Movimientos: {resumen['movimientos']}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card1,
+            text=f"Último movimiento: {resumen['ultimo_concepto']}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card1,
+            text=f"Monto: ${resumen['ultimo_monto']:,.2f}"
         ).pack(anchor="w")
 
         # Tarjeta Respaldos

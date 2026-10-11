@@ -31,11 +31,23 @@ def obtener_resumen_financiero():
     """)
     gastos = cursor.fetchone()[0]
 
+    # Último movimiento
+    cursor.execute("""
+        SELECT concepto, monto
+        FROM movimientos
+        ORDER BY id DESC
+        LIMIT 1
+    """)
+
+    ultimo = cursor.fetchone()
+
     conn.close()
 
     return {
         "movimientos": movimientos,
-        "ingresos": ingresos,
-        "gastos": gastos,
-        "balance": ingresos - gastos
+        "ingresos": round(ingresos, 2),
+        "gastos": round(gastos, 2),
+        "balance": round(ingresos - gastos, 2),
+        "ultimo_concepto": ultimo[0] if ultimo else "",
+        "ultimo_monto": ultimo[1] if ultimo else 0
     }
