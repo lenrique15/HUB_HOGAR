@@ -1,7 +1,9 @@
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 import subprocess
+
 from modules.afi_connector import obtener_resumen_financiero
+from modules.adp_connector import obtener_resumen_respaldos
 
 
 
@@ -11,6 +13,7 @@ class HubHogar:
         self.root = root
 
         resumen = obtener_resumen_financiero()
+        respaldos = obtener_resumen_respaldos()
 
         root.title("HUB Hogar 0.1 ALPHA")
 
@@ -114,7 +117,12 @@ class HubHogar:
 
         ttk.Label(
             card2,
-            text="ADP conectado próximamente"
+            text=f"Respaldos realizados: {respaldos['total_respaldos']}"
+        ).pack(anchor="w")
+
+        ttk.Label(
+            card2,
+            text=f"Último respaldo: {respaldos['ultimo_respaldo']}"
         ).pack(anchor="w")
 
         # Botones

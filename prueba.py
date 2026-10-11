@@ -1,3 +1,3 @@
-from modules.afi_connector import obtener_resumen_financiero
+from modules.adp_connector import obtener_resumen_respaldos
 
-print(obtener_resumen_financiero())
+print(obtener_resumen_respaldos())
